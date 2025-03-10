@@ -8,6 +8,17 @@ from math import *
 
 
 class FixedTime():
+    """
+    Represents fixed prayer time adjustments for both regular days and Ramadan.
+    
+    This class is used to store prayer time adjustments that are applied
+    throughout the year and special adjustments for Ramadan.
+    
+    Args:
+        all_year_time_min (float): Time adjustment in minutes for regular days
+        ramadan_time_min (float): Time adjustment in minutes for Ramadan days
+    """
+
     def __init__(self, all_year_time_min, ramadan_time_min):
         self._all_year_time = all_year_time_min
         self._ramadan_time = ramadan_time_min
@@ -22,6 +33,20 @@ class FixedTime():
 
 
 class MethodInfo:
+    """
+    Defines a prayer time calculation method used by various Islamic organizations.
+    
+    This class stores the parameters used for calculating prayer times according to
+    different recognized Islamic authorities and their geographical applicability.
+    
+    Args:
+        method_id (int): Unique identifier for the calculation method
+        organizations (str or list): Organization(s) using this method
+        fajr_angle (float): Angle for Fajr prayer calculation
+        ishaa_angle (float): Angle for Isha prayer calculation
+        applicability (tuple): Regions/countries where this method is applicable
+    """
+
     def __init__(self, method_id, organizations, fajr_angle, ishaa_angle, applicability=()):
         self._id = method_id
         self._organizations = organizations if type(
@@ -91,6 +116,21 @@ LIST_FAJR_ISHA_METHODS = (
 
 
 class PrayerConf:
+    """
+    Configuration for prayer time calculations.
+    
+    This class holds the geographical and methodological parameters needed
+    to calculate prayer times for a specific location.
+    
+    Args:
+        longitude (float): Geographical longitude of the location
+        latitude (float): Geographical latitude of the location
+        timezone (int): Timezone offset from UTC
+        angle_ref (int, optional): Reference method for Fajr/Isha angles. Defaults to 2
+        asr_madhab (int, optional): Asr shadow calculation method (1=Shafi'i, 2=Hanafi). Defaults to 1
+        enable_summer_time (bool, optional): Whether to adjust for daylight saving. Defaults to False
+    """
+
     def __init__(self, longitude, latitude, timezone, angle_ref=2,
                  asr_madhab=1, enable_summer_time=False):
         '''Initialize the PrayerConf object
@@ -137,7 +177,27 @@ class PrayerConf:
 
 
 class Prayer:
-    '''Prayer times and qiblah calculating class'''
+    """
+    Main class for calculating Islamic prayer times.
+    
+    This class performs the actual calculations of prayer times based on
+    the provided configuration and date.
+    
+    Args:
+        conf (PrayerConf): Configuration object with location and calculation parameters
+        dat (date): Date for which to calculate prayer times
+        correction_val (float, optional): Optional correction value in minutes. Defaults to 0
+    
+    Methods:
+        fajr_time(): Get Fajr prayer time
+        sherook_time(): Get sunrise time
+        dohr_time(): Get Dhuhr prayer time
+        asr_time(): Get Asr prayer time
+        maghreb_time(): Get Maghrib prayer time
+        ishaa_time(): Get Isha prayer time
+        midnight(): Get Islamic midnight time
+        last_third_of_night(): Get the beginning of the last third of night
+    """
 
     def __init__(self, conf, dat, correction_val=0):
         self._conf = conf

@@ -1,3 +1,26 @@
+"""
+Hijri Calendar Conversion Module
+
+This module provides functionality to convert between Gregorian and Hijri (Islamic) calendar dates.
+It supports both the standard Hijri calendar and the Umm al-Qura calendar used in Saudi Arabia.
+
+The conversion algorithms are based on astronomical calculations and verified against
+official calendars. The module handles date validation and provides utility methods
+for working with Islamic dates.
+
+Example Usage:
+    from datetime import date
+    from pyIslam.hijri import HijriDate
+    
+    # Convert from Gregorian to Hijri
+    today = date.today()
+    hijri = HijriDate.from_gregorian(today)
+    
+    # Convert from Hijri to Gregorian
+    ramadan_start = HijriDate(1444, 9, 1)  # 1 Ramadan 1444
+    greg_date = ramadan_start.to_gregorian()
+"""
+
 # -*- coding: utf-8 -*-
 
 from datetime import date, timedelta
@@ -5,6 +28,36 @@ from pyIslam.baselib import julian_to_hijri, gregorian_to_julian, hijri_to_julia
 
 
 class HijriDate:
+    """
+    A class representing a date in the Islamic (Hijri) calendar.
+    
+    This class provides methods for creating and manipulating Hijri dates,
+    as well as converting between Gregorian and Hijri calendars.
+    
+    Args:
+        year (int): Hijri year
+        month (int): Hijri month (1-12)
+        day (int): Day of the month (1-30)
+        adjustment (int, optional): Days to adjust the calculation. Defaults to 0
+    
+    Attributes:
+        month_names (tuple): Names of Hijri months in Arabic
+        month_names_en (tuple): Names of Hijri months in English
+    
+    Note:
+        The Hijri calendar is a lunar calendar consisting of 12 months in a year of
+        354 or 355 days. It is used by Muslims to determine religious observances.
+    """
+    
+    # Month names in Arabic and English
+    month_names = ('محرم', 'صفر', 'ربيع الأول', 'ربيع الثاني',
+                  'جمادى الأولى', 'جمادى الثانية', 'رجب', 'شعبان',
+                  'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة')
+    
+    month_names_en = ('Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
+                     'Jumada al-Ula', 'Jumada al-Thania', 'Rajab', 'Shaban',
+                     'Ramadan', 'Shawwal', 'Dhu al-Qada', 'Dhu al-Hijja')
+    
     def __init__(self, year, month, day):  # Constructor
         if isinstance(year, int):
             if year < 0:

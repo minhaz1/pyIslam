@@ -1,10 +1,41 @@
-# -*- coding: utf-8 -*-
+"""
+Qiblah Direction Calculator
 
-from pyIslam.baselib import dcos, dsin
-from math import atan, pi
+This module provides functionality to calculate the direction of the Qiblah (the direction
+to the Kaaba in Mecca) from any point on Earth using spherical trigonometry.
+
+The Qiblah direction is calculated using the coordinates of Mecca (21.4225239, 39.8261816)
+as a reference point. The result can be obtained in degrees from true north.
+
+Example Usage:
+    from pyIslam.qiblah import Qiblah
+    
+    # Calculate Qiblah direction for Paris, France
+    qiblah = Qiblah(longitude=2.3522, latitude=48.8566)
+    direction = qiblah.get_qiblah()  # Returns direction in degrees from true north
+"""
+
+from math import pi, atan, acos, asin
+from pyIslam.baselib import dcos, dsin, normalize
 
 
 class Qiblah:
+    """
+    Calculate Qiblah direction from any location on Earth.
+    
+    This class implements the spherical trigonometry calculations needed to determine
+    the direction to the Kaaba in Mecca from any given point on Earth.
+    
+    Args:
+        longitude (float): Geographical longitude of the location
+        latitude (float): Geographical latitude of the location
+        
+    Note:
+        - Longitude is positive for East and negative for West
+        - Latitude is positive for North and negative for South
+        - The returned angle is measured clockwise from true North
+    """
+    
     def __init__(self, conf):
         self._conf = conf
         MAKKAH_LATI = 21.42249   # latitude taken from maps.google.com
